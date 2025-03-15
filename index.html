@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>progamer_chef</title>
+    <!-- Add audio element (hidden) -->
+    <audio id="boomboxAudio" style="display: none;"></audio>
+    <style>
+      body {
+        margin: 0;
+        overflow: hidden;
+        font-family: Arial, sans-serif;
+      }
+
+      canvas {
+        display: block;
+      }
+
+      #textContainer {
+          position: absolute;
+          background-color: #fff;
+          font-family: monospace;
+          font-size: 20px;
+          width: 80%;
+          height: 80%;
+          top: 10%;
+          left: 10%;
+          display: none; /* Initially hidden */
+          overflow: auto; /* Enable scrolling */
+          cursor: pointer;
+          z-index: 100;
+          padding: 20px; /* Add padding to prevent text from touching edges */
+          box-sizing: border-box; /* Make padding included in width/height calculation */
+        
+      }
+      .boombox {
+          position: fixed;
+          bottom: 20px;
+          left: 50%;
+          transform: translateX(-50%)scale(.5)translateY(50%);
+          cursor: pointer; /* Add pointer cursor to indicate it's clickable */
+          z-index: 1000; /* Ensure it's above other elements */
+          width: 150px; /* Set explicit width */
+          height: 150px; /* Set explicit height */
+      }
+      
+      /* Hide video element but keep it active */
+      #videoSource {
+        display: none;
+      }
+      
+      /* Add play button for video */
+      #playButton {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        padding: 10px 20px;
+        background-color: rgba(0, 0, 0, 0.7);
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 16px;
+        z-index: 200;
+        display: none; /* Initially hidden, will show if video fails to autoplay */
+      }
+      
+      /* Audio controls for video */
+      #audioControls {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        background-color: rgba(0, 0, 0, 0.5);
+        color: white;
+        padding: 8px 12px;
+        border-radius: 5px;
+        cursor: pointer;
+        z-index: 150;
+        display: flex;
+        align-items: center;
+        font-family: monospace;
+      }
+      
+      #audioControls img {
+        width: 20px;
+        height: 20px;
+        margin-right: 8px;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Add play button -->
+    <button id="playButton">Click to Start Video</button>
+    
+    <!-- Audio controls for video -->
+    <div id="audioControls">
+      <img id="audioIcon" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IndoaXRlIiBzdHJva2Utd2lkdGg9IjIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCI+PHBvbHlnb24gcG9pbnRzPSIxMSA1IDYgOSAyIDkgMiAxNSA2IDE1IDExIDE5IDExIDUiPjwvcG9seWdvbj48cGF0aCBkPSJNMTUuNTQgOC40NkE1IDUgMCAwIDEgMTkgMTNhNSA1IDAgMCAxLTMuNDYgNC41NCI+PC9wYXRoPjxwYXRoIGQ9Ik0xOS4wNyA0LjkzYTEwIDEwIDAgMCAxIDAgMTQuMTQiPjwvcGF0aD48L3N2Zz4=" alt="Audio">
+      <span>Turn On Audio</span>
+    </div>
+    
+    <!-- Add hidden video element with muted attribute for autoplay -->
+    <video 
+      id="videoSource" 
+      loop 
+      crossorigin="anonymous" 
+      playsinline
+      muted
+      autoplay>
+      <source src="" type="video/mp4">
+      <!-- Replace with your actual video file -->
+    </video>
+    
+    <div class="boombox">
+      <img id="boomboxImage" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="box go boom" style="width: 100%; height: 100%; object-fit: contain;">
+      <p style="text-align: center; margin-top: 5px; font-size: 12px; color: blue; font-family: monospace;">set the atmosphere?</p>
+    </div>
+    <!-- Text container div -->
+    <div id="textContainer">
+      <div style="padding: 20px; max-width: 80%;">
+        <h2>ソンダー</h2>
+        <p>「sonder」sonder(n) - the feeling one has on realizing that every other individual one sees has a life as full and real as one's own, in which they are the central character and others, including oneself, have secondary or insignificant roles"</p>
+        
+        <p>i made this at a time in my life where I became almost paralyzed and was forced into recovery. my life lifes were completely side-tracked and as i recoverd, i looked at all my peers and friends flew by past me. i thought we were in this together. i thought we would succeed together. but of course, i shouldn't have expected them to wait for me. they were all concerned with their own lives. was it right of them to be concerned with mine?</p>
+        
+        <p>
+        this footage is from leftover footage of a camp i was supposed to lead at. i had waited all year for this and all of a sudden i was bedridden. i had normally made camp montages as a way of showing love and gratitude for the kids. they all loved it. this year, i still did that, but after i finished that, i wanted to do something for myself. in a silly reason such as missing out on summer camp, i created this.
+        </p>
+        <p>you can view the original <a href="https://www.instagram.com/reel/CxChN8XOE6q/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA==" target="_blank">here</a></p>
+      </div>
+    </div>
+
+    <!-- Include Three.js from CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script>
+      // Make sure we have the correct path to the GIF
+      const gifPath = 'boombox.gif'; // Update this to the correct path if needed
+      let isPlaying = false;
+      const boomboxImage = document.getElementById('boomboxImage');
+      const boomboxAudio = document.getElementById('boomboxAudio');
+      
+      // List of audio files to play randomly
+      const audioFiles = [
+        '22-33-19-19-youtube(1).mp3',
+        '22-36-14-manabu-nagay-a-low-tension-youtube.mp3',
+        '22-37-50-backroom-labyrinth-youtube.mp3',
+        
+        // Add more audio files as needed
+      ];
+      
+      // Video element - keeping video separate from audio
+      const videoElement = document.getElementById('videoSource');
+      const playButton = document.getElementById('playButton');
+      
+      // Function to get a random audio file
+      function getRandomAudio() {
+        const randomIndex = Math.floor(Math.random() * audioFiles.length);
+        return audioFiles[randomIndex];
+      }
+      
+      // Check if image exists by preloading it
+      const preloadGif = new Image();
+      preloadGif.src = gifPath;
+      preloadGif.onload = function() {
+        console.log('GIF loaded successfully');
+      };
+      preloadGif.onerror = function() {
+        console.error('Failed to load GIF. Please check the path: ' + gifPath);
+      };
+      
+      document.querySelector('.boombox').addEventListener('click', function() {
+        if (isPlaying) {
+          // Stop the animation and audio
+          boomboxImage.src = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
+          boomboxAudio.pause();
+          boomboxAudio.currentTime = 0; // Reset audio to beginning
+          isPlaying = false;
+        } else {
+          // Start the animation and play random audio
+          boomboxImage.src = gifPath;
+          
+          // Set a random audio file
+          const audioFile = getRandomAudio();
+          boomboxAudio.src = audioFile;
+          
+          // Play the audio (with error handling)
+          const playPromise = boomboxAudio.play();
+          if (playPromise !== undefined) {
+            playPromise.catch(error => {
+              console.error('Audio playback failed:', error);
+              // If autoplay is blocked, show message to user
+              if (error.name === 'NotAllowedError') {
+                alert('Please interact with the page first to enable audio playback.');
+              }
+            });
+          }
+          
+          isPlaying = true;
+        }
+      });
+      
+      // Get audio controls elements
+      const audioControls = document.getElementById('audioControls');
+      const audioIcon = document.getElementById('audioIcon');
+      
+      // Add click handler for play button
+      playButton.addEventListener('click', function() {
+        // Keep muted but play the video
+        videoElement.play().then(() => {
+          // Hide the play button after successful play
+          playButton.style.display = 'none';
+          // Show audio controls after video starts
+          audioControls.style.display = 'flex';
+          // Make sure the video texture updates
+          if (mainPanel && mainPanel.material && mainPanel.material.map) {
+            mainPanel.material.map.needsUpdate = true;
+          }
+        }).catch(error => {
+          console.error('Video play failed after click:', error);
+        });
+      });
+      
+      // Add click handler for audio controls
+      audioControls.addEventListener('click', function() {
+        // Toggle muted state
+        videoElement.muted = !videoElement.muted;
+        
+        // Update the icon and text based on muted state
+        if (videoElement.muted) {
+          audioIcon.src = "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IndoaXRlIiBzdHJva2Utd2lkdGg9IjIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCI+PHBvbHlnb24gcG9pbnRzPSIxMSA1IDYgOSAyIDkgMiAxNSA2IDE1IDExIDE5IDExIDUiPjwvcG9seWdvbj48cGF0aCBkPSJNMTUuNTQgOC40NkE1IDUgMCAwIDEgMTkgMTNhNSA1IDAgMCAxLTMuNDYgNC41NCI+PC9wYXRoPjxwYXRoIGQ9Ik0xOS4wNyA0LjkzYTEwIDEwIDAgMCAxIDAgMTQuMTQiPjwvcGF0aD48L3N2Zz4=";
+          audioControls.querySelector('span').textContent = "Turn On Audio";
+        } else {
+          audioIcon.src = "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IndoaXRlIiBzdHJva2Utd2lkdGg9IjIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCI+PHBvbHlnb24gcG9pbnRzPSIxMSA1IDYgOSAyIDkgMiAxNSA2IDE1IDExIDE5IDExIDUiPjwvcG9seWdvbj48cGF0aCBkPSJNMjMgOWwtOCA2aDRsOC02aC00eiI+PC9wYXRoPjxwYXRoIGQ9Ik0yMyAxNWwtOCA2aDRsOC02aC00eiI+PC9wYXRoPjwvc3ZnPg==";
+          audioControls.querySelector('span').textContent = "Turn Off Audio";
+        }
+      });
+      
+      let scene, camera, renderer;
+      let mainPanel, mainPanelBorder;
+      let cornerLines = [];
+      let doorMesh; // Door on the bottom-left connecting line.
+      let doorMesh2; // Door on the bottom-right connecting line.
+
+      // Track if we're viewing the panel or text
+      let isViewingPanel = true;
+
+      // URLs for the door links
+      const redDoorURL = "https://progamer-chef.github.io/final-bio/";
+      const blueDoorURL = "https://progamer-chef.github.io/FINAL-PROJECT/";
+
+      // Text container element
+      const textContainer = document.getElementById('textContainer');
+
+      init();
+      animate();
+
+      function init() {
+        // Create the scene with a white background.
+        scene = new THREE.Scene();
+        scene.background = new THREE.Color(0xffffff);
+
+        // Create a perspective camera.
+        camera = new THREE.PerspectiveCamera(
+          75,
+          window.innerWidth / window.innerHeight,
+          0.1,
+          1000
+        );
+        camera.position.z = 5;
+
+        // Set up the renderer.
+        renderer = new THREE.WebGLRenderer({
+          antialias: true
+        });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        document.body.appendChild(renderer.domElement);
+
+        // Create video texture (replace the static image)
+        const videoTexture = new THREE.VideoTexture(videoElement);
+        videoTexture.minFilter = THREE.LinearFilter;
+        videoTexture.magFilter = THREE.LinearFilter;
+        
+        // Handle different Three.js versions
+        videoTexture.format = THREE.RGBFormat || THREE.RGBAFormat;
+        
+        // Have a fallback texture in case video fails to load
+        const textureLoader = new THREE.TextureLoader();
+        const fallbackTexture = textureLoader.load('aochan.jpg');
+        
+        // Use the video texture for the panel material
+        const panelMaterial = new THREE.MeshBasicMaterial({
+          map: videoTexture,
+          side: THREE.DoubleSide
+        });
+
+        // Create the main panel with an empty geometry (it will be updated in updateScene).
+        mainPanel = new THREE.Mesh(new THREE.BufferGeometry(), panelMaterial);
+        scene.add(mainPanel);
+
+        // Initialize corner lines array but don't create geometry yet
+        cornerLines = [null, null, null, null];
+
+        // Set up raycaster and mouse vector for click interactions.
+        const raycaster = new THREE.Raycaster();
+        const mouse = new THREE.Vector2();
+
+        function onMouseClick(event) {
+          // Convert mouse position to normalized device coordinates (-1 to +1).
+          mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+          mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+          raycaster.setFromCamera(mouse, camera);
+
+          // Only process panel clicks if we're in panel view mode
+          if (isViewingPanel) {
+            // Check if a door was clicked
+            const doorIntersects = raycaster.intersectObjects([doorMesh, doorMesh2]);
+            if (doorIntersects.length > 0) {
+              // Determine which door was clicked
+              if (doorIntersects[0].object === doorMesh) {
+                console.log("Red door clicked!");
+                window.open(redDoorURL, '_blank');
+              } else if (doorIntersects[0].object === doorMesh2) {
+                console.log("Blue door clicked!");
+                window.open(blueDoorURL, '_blank');
+              }
+              return; // Don't process panel click if door was clicked
+            }
+
+            // Check if panel was clicked
+            const panelIntersects = raycaster.intersectObjects([mainPanel, mainPanelBorder]);
+            if (panelIntersects.length > 0) {
+              console.log("Main panel clicked!");
+
+              // Hide panel and all related elements
+              mainPanel.visible = false;
+              cornerLines.forEach(line => {
+                if (line) line.visible = false;
+              });
+              if (doorMesh) doorMesh.visible = false;
+              if (doorMesh2) doorMesh2.visible = false;
+
+              // Position text container where the panel was
+              textContainer.style.display = 'block';
+
+              // Update state
+              isViewingPanel = false;
+
+              // Force a render to update immediately
+              renderer.render(scene, camera);
+            }
+          }
+        }
+        window.addEventListener("click", onMouseClick, false); 
+
+        // Add click handler for text container to show panel again
+        textContainer.addEventListener("click", function(event) {
+          console.log("Text container clicked!");
+          // Prevent the event from bubbling up
+          event.stopPropagation();
+
+          // Force the panel to reappear regardless of state
+          mainPanel.visible = true;
+          cornerLines.forEach(line => {
+            if (line) line.visible = true;
+          });
+          if (doorMesh) doorMesh.visible = true;
+          if (doorMesh2) doorMesh2.visible = true;
+
+          // Hide the text
+          textContainer.style.display = 'none';
+
+          // Update state
+          isViewingPanel = true;
+
+          // Force a render to update immediately
+          renderer.render(scene, camera);
+        });
+
+        // Initially hide audio controls
+        audioControls.style.display = 'none';
+        
+        // Try to start the video - if it fails, show the play button
+        videoElement.play().then(() => {
+          console.log('Video autoplay started successfully');
+          // Show audio controls after successful autoplay
+          audioControls.style.display = 'flex';
+        }).catch(error => {
+          console.error('Video autoplay failed:', error);
+          // Show the play button if autoplay is not allowed
+          playButton.style.display = 'block';
+          // Use fallback texture if video fails
+          mainPanel.material.map = fallbackTexture;
+          mainPanel.material.needsUpdate = true;
+        });
+
+        // Build the scene geometry.
+        updateScene();
+        window.addEventListener('resize', onWindowResize, false);
+      }
+
+      function updateScene() {
+        // If we're in text view mode, don't do any updates
+        if (!isViewingPanel) {
+          return;
+        }
+
+        // --- Compute Viewport and Main Panel Dimensions ---
+        const distance = camera.position.z;
+        const vFOV = THREE.Math.degToRad(camera.fov);
+        const viewHeight = 2 * distance * Math.tan(vFOV / 2);
+        const viewWidth = viewHeight * camera.aspect;
+
+        const halfWidth = viewWidth / 2;
+        const halfHeight = viewHeight / 2;
+        const vpLeft = -halfWidth;
+        const vpRight = halfWidth;
+        const vpTop = halfHeight;
+        const vpBottom = -halfHeight;
+
+        // Define main panel boundaries (80% of viewport).
+        const mainLeft = -0.4 * viewWidth;
+        const mainRight = 0.4 * viewWidth;
+        const mainTop = 0.4 * viewHeight;
+        const mainBottom = -0.4 * viewHeight;
+
+        // --- Update Main Panel Geometry ---
+        const mainGeom = new THREE.BufferGeometry();
+        const mainVertices = new Float32Array([
+          mainLeft, mainTop, 0,
+          mainRight, mainTop, 0,
+          mainRight, mainBottom, 0,
+          mainLeft, mainBottom, 0
+        ]);
+        mainGeom.setAttribute('position', new THREE.BufferAttribute(mainVertices, 3));
+        const uvs = new Float32Array([
+          0, 1,
+          1, 1,
+          1, 0,
+          0, 0
+        ]);
+        mainGeom.setAttribute('uv', new THREE.BufferAttribute(uvs, 2));
+        mainGeom.setIndex([0, 1, 2, 2, 3, 0]);
+        mainGeom.computeVertexNormals();
+
+        // Dispose of old geometry before replacing
+        if (mainPanel.geometry) {
+          mainPanel.geometry.dispose();
+        }
+        mainPanel.geometry = mainGeom;
+
+        // --- Update Main Panel Border ---
+        if (mainPanelBorder) {
+          mainPanel.remove(mainPanelBorder);
+          mainPanelBorder.geometry.dispose();
+        }
+        mainPanelBorder = new THREE.LineSegments(
+          new THREE.EdgesGeometry(mainPanel.geometry),
+          new THREE.LineBasicMaterial({
+            color: 0x000000
+          })
+        );
+        // Add border to panel so it moves with it
+        mainPanel.add(mainPanelBorder);
+
+        // --- Update the Corner Connecting Lines ---
+        const lineMaterial = new THREE.LineBasicMaterial({
+          color: 0x000000
+        });
+        const pairs = [{
+            window: new THREE.Vector3(vpLeft, vpTop, 0),
+            panel: new THREE.Vector3(mainLeft, mainTop, 0)
+          },
+          {
+            window: new THREE.Vector3(vpRight, vpTop, 0),
+            panel: new THREE.Vector3(mainRight, mainTop, 0)
+          },
+          {
+            window: new THREE.Vector3(vpRight, vpBottom, 0),
+            panel: new THREE.Vector3(mainRight, mainBottom, 0)
+          },
+          {
+            window: new THREE.Vector3(vpLeft, vpBottom, 0),
+            panel: new THREE.Vector3(mainLeft, mainBottom, 0)
+          }
+        ];
+
+        // Handle each corner line
+        for (let i = 0; i < 4; i++) {
+          const pts = [pairs[i].window, pairs[i].panel];
+          const lineGeom = new THREE.BufferGeometry().setFromPoints(pts);
+
+          // If the line already exists, update its geometry
+          if (cornerLines[i]) {
+            scene.remove(cornerLines[i]);
+            cornerLines[i].geometry.dispose();
+          }
+
+          // Create a new line
+          cornerLines[i] = new THREE.Line(lineGeom, lineMaterial);
+          scene.add(cornerLines[i]);
+        }
+
+        // --- Create/Update Door on the Bottom-Left Line ---
+        const A = new THREE.Vector3(vpLeft, vpBottom, 0);
+        const B = new THREE.Vector3(mainLeft, mainBottom, 0);
+        const dir = new THREE.Vector3().subVectors(B, A);
+        const lineLength = dir.length();
+        const doorLength = 0.3 * lineLength;
+        const doorDir = dir.clone().normalize();
+        const M = new THREE.Vector3().addVectors(A, B).multiplyScalar(0.5);
+        const doorBottomLeft = M.clone().addScaledVector(doorDir, -doorLength / 2);
+        const doorBottomRight = M.clone().addScaledVector(doorDir, doorLength / 2);
+        const vertical = new THREE.Vector3(0, 1, 0);
+        const doorHeight = 0.1 * viewHeight;
+        const doorTopLeft = doorBottomLeft.clone().addScaledVector(vertical, doorHeight);
+        const doorTopRight = doorBottomRight.clone().addScaledVector(vertical, doorHeight);
+        const doorVertices = new Float32Array([
+          doorBottomLeft.x, doorBottomLeft.y, doorBottomLeft.z,
+          doorBottomRight.x, doorBottomRight.y, doorBottomRight.z,
+          doorTopRight.x, doorTopRight.y, doorTopRight.z,
+          doorTopLeft.x, doorTopLeft.y, doorTopLeft.z
+        ]);
+        const doorGeom = new THREE.BufferGeometry();
+        doorGeom.setAttribute('position', new THREE.BufferAttribute(doorVertices, 3));
+        doorGeom.setIndex([0, 1, 2, 2, 3, 0]);
+        doorGeom.computeVertexNormals();
+
+        // Clean up existing door mesh
+        if (doorMesh) {
+          scene.remove(doorMesh);
+          doorMesh.geometry.dispose();
+          doorMesh.material.dispose();
+        }
+
+        const doorMaterial = new THREE.MeshBasicMaterial({
+          color: 0xff0000,
+          side: THREE.DoubleSide,
+          transparent: true,
+          opacity: 0.8
+        });
+        doorMesh = new THREE.Mesh(doorGeom, doorMaterial);
+        doorMesh.userData.isDoor = true;
+        doorMesh.userData.url = redDoorURL;
+        scene.add(doorMesh);
+
+        // --- Create/Update Door on the Bottom-Right Line ---
+        const A2 = new THREE.Vector3(vpRight, vpBottom, 0);
+        const B2 = new THREE.Vector3(mainRight, mainBottom, 0);
+        const dir2 = new THREE.Vector3().subVectors(B2, A2);
+        const lineLength2 = dir2.length();
+        const doorLength2 = 0.3 * lineLength2;
+        const doorDir2 = dir2.clone().normalize();
+        const M2 = new THREE.Vector3().addVectors(A2, B2).multiplyScalar(0.5);
+        const doorBottomLeft2 = M2.clone().addScaledVector(doorDir2, -doorLength2 / 2);
+        const doorBottomRight2 = M2.clone().addScaledVector(doorDir2, doorLength2 / 2);
+        const doorTopLeft2 = doorBottomLeft2.clone().addScaledVector(vertical, doorHeight);
+        const doorTopRight2 = doorBottomRight2.clone().addScaledVector(vertical, doorHeight);
+        const doorVertices2 = new Float32Array([
+          doorBottomLeft2.x, doorBottomLeft2.y, doorBottomLeft2.z,
+          doorBottomRight2.x, doorBottomRight2.y, doorBottomRight2.z,
+          doorTopRight2.x, doorTopRight2.y, doorTopRight2.z,
+          doorTopLeft2.x, doorTopLeft2.y, doorTopLeft2.z
+        ]);
+        const doorGeom2 = new THREE.BufferGeometry();
+        doorGeom2.setAttribute('position', new THREE.BufferAttribute(doorVertices2, 3));
+        doorGeom2.setIndex([0, 1, 2, 2, 3, 0]);
+        doorGeom2.computeVertexNormals();
+
+        // Clean up existing door mesh
+        if (doorMesh2) {
+          scene.remove(doorMesh2);
+          doorMesh2.geometry.dispose();
+          doorMesh2.material.dispose();
+        }
+
+        const doorMaterial2 = new THREE.MeshBasicMaterial({
+          color: 0x0000ff,
+          side: THREE.DoubleSide,
+          transparent: true,
+          opacity: 0.8
+        });
+        doorMesh2 = new THREE.Mesh(doorGeom2, doorMaterial2);
+        doorMesh2.userData.isDoor = true;
+        doorMesh2.userData.url = blueDoorURL;
+        scene.add(doorMesh2);
+
+        // Add cursor change when hovering over doors
+        document.addEventListener('mousemove', onDocumentMouseMove, false);
+      }
+
+      function onDocumentMouseMove(event) {
+        if (!isViewingPanel) return;
+
+        // Get mouse position
+        const mouse = new THREE.Vector2();
+        mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+        mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+
+        // Check for door intersections
+        const raycaster = new THREE.Raycaster();
+        raycaster.setFromCamera(mouse, camera);
+        const intersects = raycaster.intersectObjects([doorMesh, doorMesh2]);
+
+        // Change cursor style based on intersection
+        if (intersects.length > 0) {
+          document.body.style.cursor = 'pointer';
+        } else {
+          document.body.style.cursor = 'default';
+        }
+      }
+
+      function onWindowResize() {
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+
+        // Only update the scene if we're in panel view mode
+        if (isViewingPanel) {
+          updateScene();
+        }
+      }
+
+      function animate() {
+        requestAnimationFrame(animate);
+        
+        // Update video texture in each frame
+        if (mainPanel && mainPanel.material && mainPanel.material.map) {
+          mainPanel.material.map.needsUpdate = true;
+        }
+        
+        renderer.render(scene, camera);
+      }
+      
+    </script>
+  </body>
+</html>
